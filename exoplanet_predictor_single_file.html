@@ -61,6 +61,23 @@
     .card {
       color: #232339;
     }
+    .upload {
+      border: 1.5px dashed var(--accent);
+      background: linear-gradient(180deg,rgba(124,58,237,0.07),transparent);
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .upload:hover, .upload:focus-within {
+      background: linear-gradient(180deg,rgba(124,58,237,0.13),transparent);
+      border-color: var(--accent-2);
+      color: var(--accent-2);
+    }
     @media (max-width:900px){.app{grid-template-columns:1fr;padding:14px}.sidebar{display:flex;flex-direction:row;overflow:auto;gap:8px}}
   </style>
 </head>
@@ -168,16 +185,17 @@
             <div class="card">
               <div style="font-weight:700">Treinamento de Modelo</div>
               <div class="muted">Selecione o dataset e envie para simular o treinamento.</div>
-              <div style="margin-top:10px">
-                <label class="muted">Fonte dos dados:</label>
-                <select id="datasetSelect" style="width:100%;padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:inherit">
-                  <option>Kepler</option>
-                  <option>K2</option>
-                  <option>TESS</option>
-                </select>
-              </div>
-              <label class="upload" for="trainFile">📁 Clique ou arraste arquivo CSV<input type="file" id="trainFile" accept=".csv"/></label>
-              <div style="margin-top:12px"><button class="btn primary">Iniciar Treinamento</button></div>
+              <label class="upload" for="trainFile" style="background:linear-gradient(180deg,rgba(124,58,237,0.07),transparent); border:1.5px dashed var(--accent); color:var(--accent); font-weight:600; cursor:pointer; transition:background 0.2s; display:flex; flex-direction:column; align-items:center; gap:8px;">
+                <span style="font-size:2.5em; margin-bottom:4px;">
+                  <i class="fa-solid fa-folder-plus"></i>
+                </span>
+                <span style="font-size:1.1em;">Selecionar CSV para Treinamento</span>
+                <span style="font-size:0.95em; color:var(--muted); font-weight:400;">Clique ou arraste o arquivo aqui</span>
+                <input type="file" id="trainFile" accept=".csv"/>
+              </label>
+                <div style="margin-top:12px; display: flex; justify-content: center;">
+                <button class="btn primary">Iniciar Treinamento</button>
+                </div>
             </div>
             <div class="card">
               <div style="font-weight:700">Resultado</div>
@@ -190,36 +208,45 @@
 
         <!-- Predict -->
         <div class="view" id="predict" style="display:none">
-          <div class="grid">
-            <div class="card">
-              <div style="font-weight:700">Previsão</div>
-              <div class="muted">Envie dados sem a coluna label, o sistema irá prever se são exoplanetas.</div>
-              <label class="upload" for="predictFile">📁 Upload CSV de previsão<input type="file" id="predictFile" accept=".csv"/></label>
-              <div style="margin-top:12px"><button class="btn primary">Executar Previsão</button></div>
-            </div>
-            <div class="card">
-              <div style="font-weight:700">Resultados</div>
-              <div class="muted">Arquivo: pred_kepler.csv · 10 linhas</div>
-              <div style="margin-top:12px;overflow:auto;max-height:220px">
-                <table><thead><tr><th>#</th><th>Probabilidade</th><th>Classe</th></tr></thead>
-                  <tbody>
-                    <tr><td>1</td><td>95%</td><td>Exoplaneta</td></tr>
-                    <tr><td>2</td><td>12%</td><td>Não</td></tr>
-                    <tr><td>3</td><td>78%</td><td>Exoplaneta</td></tr>
-                    <tr><td>4</td><td>43%</td><td>Não</td></tr>
-                    <tr><td>5</td><td>66%</td><td>Exoplaneta</td></tr>
-                    <tr><td>6</td><td>88%</td><td>Exoplaneta</td></tr>
-                    <tr><td>7</td><td>22%</td><td>Não</td></tr>
-                    <tr><td>8</td><td>54%</td><td>Exoplaneta</td></tr>
-                    <tr><td>9</td><td>39%</td><td>Não</td></tr>
-                    <tr><td>10</td><td>81%</td><td>Exoplaneta</td></tr>
-                  </tbody>
-                </table>
-              </div>
-              <canvas id="predChart" height="160" style="margin-top:12px"></canvas>
-            </div>
-          </div>
-        </div>
+  <div class="grid">
+    <div class="card">
+      <div style="font-weight:700">Previsão</div>
+      <label class="upload" for="predictFile" style="background:linear-gradient(180deg,rgba(124,58,237,0.07),transparent); border:1.5px dashed var(--accent); color:var(--accent); font-weight:600; cursor:pointer; transition:background 0.2s; display:flex; flex-direction:column; align-items:center; gap:8px;">
+        <span style="font-size:2.5em; margin-bottom:4px;">
+          <i class="fa-solid fa-folder-plus"></i>
+        </span>
+        <span style="font-size:1.1em;">Upload CSV de previsão</span>
+        <span style="font-size:0.95em; color:var(--muted); font-weight:400;">Clique ou arraste o arquivo aqui</span>
+        <input type="file" id="predictFile" accept=".csv"/>
+      </label>
+      <div style="margin-top:12px; display: flex; justify-content: center;">
+        <button class="btn primary">Executar Previsão</button>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700">Resultados</div>
+      <div class="muted">Arquivo: pred_kepler.csv · 10 linhas</div>
+      <div style="margin-top:12px;overflow:auto;max-height:220px">
+        <table>
+          <thead><tr><th>#</th><th>Probabilidade</th><th>Classe</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>95%</td><td>Exoplaneta</td></tr>
+            <tr><td>2</td><td>12%</td><td>Não</td></tr>
+            <tr><td>3</td><td>78%</td><td>Exoplaneta</td></tr>
+            <tr><td>4</td><td>43%</td><td>Não</td></tr>
+            <tr><td>5</td><td>66%</td><td>Exoplaneta</td></tr>
+            <tr><td>6</td><td>88%</td><td>Exoplaneta</td></tr>
+            <tr><td>7</td><td>22%</td><td>Não</td></tr>
+            <tr><td>8</td><td>54%</td><td>Exoplaneta</td></tr>
+            <tr><td>9</td><td>39%</td><td>Não</td></tr>
+            <tr><td>10</td><td>81%</td><td>Exoplaneta</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <canvas id="predChart" height="160" style="margin-top:12px"></canvas>
+    </div>
+  </div>
+</div>
 
         <!-- Users -->
         <div class="view" id="users" style="display:none">
@@ -332,3 +359,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+</body>
+</html>
