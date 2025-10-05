@@ -6,7 +6,9 @@
   <link rel="icon" type="image/x-icon" href="img/logo.png" />
   <title>Admin | Exoplanet Predictor</title>
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
@@ -15,11 +17,11 @@
     }
 
     :root{
-      --bg:#0f1724; --card:#0b1220; --muted:#424255; --accent:#7c3aed; --accent-2:#06b6d4; --success:#10b981; --danger:#ef4444;;
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      --bg:#0f1724; --card:#0b1220; --muted:#424255; --accent:#7c3aed ; --accent-2:#06b6d4; --success:#10b981; --danger:#FA2B23;
+      font-family: 'Montserrat';
     }
     *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071025 0%, #071226 60%);color:#e6eef8}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071025 0%, #071226 60%);color:#e6eef8; font-family: 'Montserrat';}
     .app {
       display: grid;
       grid-template-columns: 260px 1fr;
@@ -53,8 +55,8 @@
     th,td{padding:8px 10px;text-align:left;font-size:13px}
     thead th{color:var(--muted);font-weight:600;font-size:12px}
     tbody tr{border-top:1px solid rgba(255,255,255,0.03)}
-    .btn{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
-    .btn.primary{background-color: #3E0070;color:white}
+    .btn{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:55px;border:0;cursor:pointer}
+    .btn.primary{background-color: #220066;color:white}
     .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
     .upload{border:1px dashed rgba(255,255,255,0.06);padding:18px;border-radius:8px;text-align:center;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
     input[type=file]{display:none}
@@ -184,7 +186,6 @@
           <div class="grid">
             <div class="card">
               <div style="font-weight:700">Treinamento de Modelo</div>
-              <div class="muted">Selecione o dataset e envie para simular o treinamento.</div>
               <label class="upload" for="trainFile" style="background:linear-gradient(180deg,rgba(124,58,237,0.07),transparent); border:1.5px dashed var(--accent); color:var(--accent); font-weight:600; cursor:pointer; transition:background 0.2s; display:flex; flex-direction:column; align-items:center; gap:8px;">
                 <span style="font-size:2.5em; margin-bottom:4px;">
                   <i class="fa-solid fa-folder-plus"></i>
@@ -215,7 +216,7 @@
         <span style="font-size:2.5em; margin-bottom:4px;">
           <i class="fa-solid fa-folder-plus"></i>
         </span>
-        <span style="font-size:1.1em;">Upload CSV de previsão</span>
+        <span style="font-size:1.1em;">Selecionar CSV para Previsão</span>
         <span style="font-size:0.95em; color:var(--muted); font-weight:400;">Clique ou arraste o arquivo aqui</span>
         <input type="file" id="predictFile" accept=".csv"/>
       </label>
@@ -307,8 +308,8 @@ document.addEventListener('DOMContentLoaded', () => {
       data: {
         labels: ['Pred 1', 'Pred 2', 'Pred 3'],
         datasets: [
-          { label: 'Exoplaneta', data: [6, 2, 3], backgroundColor: '#6ce5e8' },
-          { label: 'Não',        data: [4, 3, 2], backgroundColor: '#e86ca2' }
+          { label: 'Exoplaneta', data: [6, 2, 3], backgroundColor: '#6CAEE8' },
+          { label: 'Não',        data: [4, 3, 2], backgroundColor: '#FA2B23' }
         ]
       },
       options: { scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'bottom' } } }
@@ -318,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'pie',
       data: {
         labels: ['Kepler', 'K2', 'TESS'],
-        datasets: [{ data: [10, 6, 4], backgroundColor: ['#004a57', '#648381', '#73d1d9'] }]
+        datasets: [{ data: [10, 6, 4], backgroundColor: ['#220066', '#7c3aed', '#6CAEE8'] }]
         // datasets: [{ data: [10, 6, 4], backgroundColor: ['#004a57', '#73d1d9', '#575761'] }]
       },
       options: { plugins: { legend: { position: 'bottom' } } }
@@ -347,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
       data: {
         labels: Array.from({length: 10}, (_, i) => `#${i+1}`),
         datasets: [
-          { label: 'Prob. Exoplaneta (%)', data: [95,12,78,43,66,88,22,54,39,81], backgroundColor: '#6ce5e8' }
+          { label: 'Prob. Exoplaneta (%)', data: [95,12,78,43,66,88,22,54,39,81], backgroundColor: '#6CAEE8' }
         ]
       },
       options: { scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { position: 'bottom' } } }
