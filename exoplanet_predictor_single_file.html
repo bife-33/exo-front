@@ -8,33 +8,57 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
+    main {
+      background-color: #C0C0C7;
+    }
+
     :root{
-      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#7c3aed; --accent-2:#06b6d4; --success:#10b981; --danger:#ef4444; --glass: rgba(255,255,255,0.03);
+      --bg:#0f1724; --card:#0b1220; --muted:#424255; --accent:#7c3aed; --accent-2:#06b6d4; --success:#10b981; --danger:#ef4444;;
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     }
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;background:linear-gradient(180deg,#071025 0%, #071226 60%);color:#e6eef8}
-    .app{display:grid;grid-template-columns:260px 1fr;gap:24px;min-height:100vh;padding:28px}
-    .sidebar{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:20px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    .app {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+      height: 100vh; /* Garante altura total */
+      gap: 0;        /* Remove espaçamento entre menu e conteúdo */
+      padding: 0;    /* Remove padding externo */
+    }
+    .sidebar {
+      background: #03031C;
+      border-radius: 0; /* Remove borda arredondada para ocupar toda a lateral */
+      padding: 20px;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+      height: 100vh;    /* Ocupa toda a altura */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: auto;
+    }
     .brand{display:flex;gap:12px;align-items:center;margin-bottom:18px}
     .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800}
     .menu{display:flex;flex-direction:column;gap:8px}
     .menu button{background:transparent;border:0;color:var(--muted);text-align:left;padding:10px;border-radius:8px;cursor:pointer}
-    .menu button.active{background:linear-gradient(90deg, rgba(124,58,237,0.12), rgba(6,182,212,0.06));color:#fff}
+    .menu button.active{background: #232329 ;color:#E0E0E3}
     .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-    .search{background:var(--glass);padding:8px 12px;border-radius:10px;display:flex;gap:8px;align-items:center;color:var(--muted)}
+    .search{background-color: #A1A1AB;padding:8px 12px;border-radius:10px;display:flex;gap:8px;align-items:center;color:var(--muted)}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;box-shadow:0 8px 20px rgba(2,6,23,0.45)}
+    .card{background-color: #F0F0F1;padding:14px;border-radius:12px;box-shadow:0 8px 20px rgba(2,6,23,0.45)}
     .muted{color:var(--muted);font-size:13px}
     table{width:100%;border-collapse:collapse}
     th,td{padding:8px 10px;text-align:left;font-size:13px}
     thead th{color:var(--muted);font-weight:600;font-size:12px}
     tbody tr{border-top:1px solid rgba(255,255,255,0.03)}
     .btn{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
-    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white}
+    .btn.primary{background-color: #3E0070;color:white}
     .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
     .upload{border:1px dashed rgba(255,255,255,0.06);padding:18px;border-radius:8px;text-align:center;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
     input[type=file]{display:none}
+    .card {
+      color: #232339;
+    }
     @media (max-width:900px){.app{grid-template-columns:1fr;padding:14px}.sidebar{display:flex;flex-direction:row;overflow:auto;gap:8px}}
   </style>
 </head>
@@ -55,7 +79,7 @@
         <button data-view="users">Usuários</button>
       </nav>
     </aside>
-    <main>
+    <main style="padding:20px;overflow:auto">
       <div class="topbar">
         <div style="display:flex;align-items:center;gap:12px">
           <div class="search"><span>🔎</span><input id="search" placeholder="Pesquisar..." style="background:transparent;border:0;color:inherit;outline:0"/></div>
@@ -105,7 +129,7 @@
               <table style="margin-top:10px">
                 <thead><tr><th>Dataset</th><th>Algoritmo</th><th>Acurácia</th></tr></thead>
                 <tbody>
-                  <tr><td>Kepler</td><td>Random Forest</td><td>93%</td></tr>
+                  <tr><td>Kepler</td><td>Rede neural</td><td>93%</td></tr>
                   <tr><td>K2</td><td>Rede Neural</td><td>92%</td></tr>
                   <tr><td>TESS</td><td>Árvore de Decisão</td><td>89%</td></tr>
                 </tbody>
@@ -151,11 +175,11 @@
                 </select>
               </div>
               <label class="upload" for="trainFile">📁 Clique ou arraste arquivo CSV<input type="file" id="trainFile" accept=".csv"/></label>
-              <div style="margin-top:12px"><button class="btn primary">Iniciar Treinamento (mock)</button></div>
+              <div style="margin-top:12px"><button class="btn primary">Iniciar Treinamento</button></div>
             </div>
             <div class="card">
-              <div style="font-weight:700">Resultado (Mock)</div>
-              <div class="muted">Dataset: Kepler · Algoritmo: Random Forest · Épocas: 10</div>
+              <div style="font-weight:700">Resultado</div>
+              <div class="muted">Dataset: Kepler · Algoritmo: Rede Neural · Épocas: 10</div>
               <div style="margin-top:12px;">Acurácia final: <strong>93%</strong></div>
               <canvas id="trainChart" height="160" style="margin-top:12px"></canvas>
             </div>
@@ -169,10 +193,10 @@
               <div style="font-weight:700">Previsão</div>
               <div class="muted">Envie dados sem a coluna label, o sistema irá prever se são exoplanetas.</div>
               <label class="upload" for="predictFile">📁 Upload CSV de previsão<input type="file" id="predictFile" accept=".csv"/></label>
-              <div style="margin-top:12px"><button class="btn primary">Executar Previsão (mock)</button></div>
+              <div style="margin-top:12px"><button class="btn primary">Executar Previsão</button></div>
             </div>
             <div class="card">
-              <div style="font-weight:700">Resultados (Mock)</div>
+              <div style="font-weight:700">Resultados</div>
               <div class="muted">Arquivo: pred_kepler.csv · 10 linhas</div>
               <div style="margin-top:12px;overflow:auto;max-height:220px">
                 <table><thead><tr><th>#</th><th>Probabilidade</th><th>Classe</th></tr></thead>
@@ -265,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'pie',
       data: {
         labels: ['Kepler', 'K2', 'TESS'],
-        datasets: [{ data: [10, 6, 4], backgroundColor: ['#7c3aed', '#06b6d4', '#10b981'] }]
+        datasets: [{ data: [10, 6, 4], backgroundColor: ['#00C853', '#648381', '#575761'] }]
       },
       options: { plugins: { legend: { position: 'bottom' } } }
     });
