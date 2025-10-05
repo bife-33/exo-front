@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin | Exoplanet Predictor</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#7c3aed; --accent-2:#06b6d4; --success:#10b981; --danger:#ef4444; --glass: rgba(255,255,255,0.03);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071025 0%, #071226 60%);color:#e6eef8}
+    .app{display:grid;grid-template-columns:260px 1fr;gap:24px;min-height:100vh;padding:28px}
+    .sidebar{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:20px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    .brand{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800}
+    .menu{display:flex;flex-direction:column;gap:8px}
+    .menu button{background:transparent;border:0;color:var(--muted);text-align:left;padding:10px;border-radius:8px;cursor:pointer}
+    .menu button.active{background:linear-gradient(90deg, rgba(124,58,237,0.12), rgba(6,182,212,0.06));color:#fff}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .search{background:var(--glass);padding:8px 12px;border-radius:10px;display:flex;gap:8px;align-items:center;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;box-shadow:0 8px 20px rgba(2,6,23,0.45)}
+    .muted{color:var(--muted);font-size:13px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px 10px;text-align:left;font-size:13px}
+    thead th{color:var(--muted);font-weight:600;font-size:12px}
+    tbody tr{border-top:1px solid rgba(255,255,255,0.03)}
+    .btn{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+    .upload{border:1px dashed rgba(255,255,255,0.06);padding:18px;border-radius:8px;text-align:center;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
+    input[type=file]{display:none}
+    @media (max-width:900px){.app{grid-template-columns:1fr;padding:14px}.sidebar{display:flex;flex-direction:row;overflow:auto;gap:8px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">EP</div>
+        <div>
+          <div style="font-weight:700">ExoAdmin</div>
+          <div class="muted" style="font-size:12px">Predictor & Training</div>
+        </div>
+      </div>
+      <nav class="menu" id="menu">
+        <button class="active" data-view="dashboard">Dashboard</button>
+        <button data-view="training">Treinamento</button>
+        <button data-view="predict">Previsão</button>
+        <button data-view="users">Usuários</button>
+      </nav>
+    </aside>
+    <main>
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="search"><span>🔎</span><input id="search" placeholder="Pesquisar..." style="background:transparent;border:0;color:inherit;outline:0"/></div>
+        </div>
+      </div>
+
+      <section id="view-container">
+        <!-- Dashboard -->
+        <div class="view" id="dashboard">
+          <div class="grid">
+            <div class="card">
+              <div class="muted">Modelos Treinados</div>
+              <div style="font-weight:700;font-size:20px">3</div>
+            </div>
+            <div class="card">
+              <div class="muted">Última Acurácia</div>
+              <div style="font-weight:700;font-size:20px">93%</div>
+            </div>
+            <div class="card">
+              <div class="muted">Total de Previsões</div>
+              <div style="font-weight:700;font-size:20px">20</div>
+            </div>
+            <div class="card">
+              <div class="muted">Fonte Mais Usada</div>
+              <div style="font-weight:700;font-size:20px">Kepler</div>
+            </div>
+          </div>
+
+          <div class="grid" style="margin-top:20px">
+            <div class="card">
+              <div style="font-weight:700">Evolução da Acurácia</div>
+              <canvas id="accChart" height="160"></canvas>
+            </div>
+            <div class="card">
+              <div style="font-weight:700">Distribuição de Previsões</div>
+              <canvas id="predDistChart" height="160"></canvas>
+            </div>
+            <div class="card">
+              <div style="font-weight:700">Datasets Usados</div>
+              <canvas id="datasetChart" height="160"></canvas>
+            </div>
+          </div>
+
+          <div class="grid" style="margin-top:20px">
+            <div class="card">
+              <div style="font-weight:700">Últimos Treinamentos</div>
+              <table style="margin-top:10px">
+                <thead><tr><th>Dataset</th><th>Algoritmo</th><th>Acurácia</th></tr></thead>
+                <tbody>
+                  <tr><td>Kepler</td><td>Random Forest</td><td>93%</td></tr>
+                  <tr><td>K2</td><td>Rede Neural</td><td>92%</td></tr>
+                  <tr><td>TESS</td><td>Árvore de Decisão</td><td>89%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <div style="font-weight:700">Últimas Previsões</div>
+              <table style="margin-top:10px">
+                <thead><tr><th>Arquivo</th><th>Linhas</th><th>% Exoplanetas</th></tr></thead>
+                <tbody>
+                  <tr><td>pred_kepler.csv</td><td>10</td><td>60%</td></tr>
+                  <tr><td>pred_k2.csv</td><td>5</td><td>40%</td></tr>
+                  <tr><td>pred_tess.csv</td><td>5</td><td>50%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <div style="font-weight:700">Usuários Ativos</div>
+              <table style="margin-top:10px">
+                <thead><tr><th>Nome</th><th>Email</th><th>Perfil</th></tr></thead>
+                <tbody>
+                  <tr><td>Ana Silva</td><td>ana@teste.com</td><td>User</td></tr>
+                  <tr><td>Carlos Souza</td><td>carlos@teste.com</td><td>User</td></tr>
+                  <tr><td>Marina Lima</td><td>marina@teste.com</td><td>User</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Training -->
+        <div class="view" id="training" style="display:none">
+          <div class="grid">
+            <div class="card">
+              <div style="font-weight:700">Treinamento de Modelo</div>
+              <div class="muted">Selecione o dataset e envie para simular o treinamento.</div>
+              <div style="margin-top:10px">
+                <label class="muted">Fonte dos dados:</label>
+                <select id="datasetSelect" style="width:100%;padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:inherit">
+                  <option>Kepler</option>
+                  <option>K2</option>
+                  <option>TESS</option>
+                </select>
+              </div>
+              <label class="upload" for="trainFile">📁 Clique ou arraste arquivo CSV<input type="file" id="trainFile" accept=".csv"/></label>
+              <div style="margin-top:12px"><button class="btn primary">Iniciar Treinamento (mock)</button></div>
+            </div>
+            <div class="card">
+              <div style="font-weight:700">Resultado (Mock)</div>
+              <div class="muted">Dataset: Kepler · Algoritmo: Random Forest · Épocas: 10</div>
+              <div style="margin-top:12px;">Acurácia final: <strong>93%</strong></div>
+              <canvas id="trainChart" height="160" style="margin-top:12px"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Predict -->
+        <div class="view" id="predict" style="display:none">
+          <div class="grid">
+            <div class="card">
+              <div style="font-weight:700">Previsão</div>
+              <div class="muted">Envie dados sem a coluna label, o sistema irá prever se são exoplanetas.</div>
+              <label class="upload" for="predictFile">📁 Upload CSV de previsão<input type="file" id="predictFile" accept=".csv"/></label>
+              <div style="margin-top:12px"><button class="btn primary">Executar Previsão (mock)</button></div>
+            </div>
+            <div class="card">
+              <div style="font-weight:700">Resultados (Mock)</div>
+              <div class="muted">Arquivo: pred_kepler.csv · 10 linhas</div>
+              <div style="margin-top:12px;overflow:auto;max-height:220px">
+                <table><thead><tr><th>#</th><th>Probabilidade</th><th>Classe</th></tr></thead>
+                  <tbody>
+                    <tr><td>1</td><td>95%</td><td>Exoplaneta</td></tr>
+                    <tr><td>2</td><td>12%</td><td>Não</td></tr>
+                    <tr><td>3</td><td>78%</td><td>Exoplaneta</td></tr>
+                    <tr><td>4</td><td>43%</td><td>Não</td></tr>
+                    <tr><td>5</td><td>66%</td><td>Exoplaneta</td></tr>
+                    <tr><td>6</td><td>88%</td><td>Exoplaneta</td></tr>
+                    <tr><td>7</td><td>22%</td><td>Não</td></tr>
+                    <tr><td>8</td><td>54%</td><td>Exoplaneta</td></tr>
+                    <tr><td>9</td><td>39%</td><td>Não</td></tr>
+                    <tr><td>10</td><td>81%</td><td>Exoplaneta</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <canvas id="predChart" height="160" style="margin-top:12px"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Users -->
+        <div class="view" id="users" style="display:none">
+          <div class="card">
+            <div style="font-weight:700">Usuários da Aplicação</div>
+            <table style="margin-top:10px">
+              <thead><tr><th>Nome</th><th>Email</th><th>Perfil</th></tr></thead>
+              <tbody>
+                <tr><td>Ana Silva</td><td>ana@teste.com</td><td>User</td></tr>
+                <tr><td>Carlos Souza</td><td>carlos@teste.com</td><td>User</td></tr>
+                <tr><td>Marina Lima</td><td>marina@teste.com</td><td>User</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const menu = document.getElementById('menu');
+  const views = document.querySelectorAll('.view');
+
+  // Handler do menu (isolado e resiliente)
+  menu?.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-view]');
+    if (!btn) return;
+
+    document.querySelectorAll('#menu button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const view = btn.dataset.view;
+    views.forEach(v => v.style.display = (v.id === view) ? 'block' : 'none');
+  });
+
+  // Inicialização dos gráficos protegida
+  try {
+    // Dashboard charts
+    new Chart(document.getElementById('accChart'), {
+      type: 'line',
+      data: {
+        labels: ['Treino 1', 'Treino 2', 'Treino 3'],
+        datasets: [{
+          label: 'Acurácia (%)',
+          data: [89, 92, 93],
+          borderColor: '#7c3aed',
+          backgroundColor: 'rgba(124,58,237,0.2)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: { scales: { y: { beginAtZero: true, max: 100 } } }
+    });
+
+    new Chart(document.getElementById('predDistChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Pred 1', 'Pred 2', 'Pred 3'],
+        datasets: [
+          { label: 'Exoplaneta', data: [6, 2, 3], backgroundColor: '#06b6d4' },
+          { label: 'Não',        data: [4, 3, 2], backgroundColor: '#ef4444' }
+        ]
+      },
+      options: { scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    new Chart(document.getElementById('datasetChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Kepler', 'K2', 'TESS'],
+        datasets: [{ data: [10, 6, 4], backgroundColor: ['#7c3aed', '#06b6d4', '#10b981'] }]
+      },
+      options: { plugins: { legend: { position: 'bottom' } } }
+    });
+
+    // Training mock chart
+    new Chart(document.getElementById('trainChart'), {
+      type: 'line',
+      data: {
+        labels: ['Época 1','Época 2','Época 3','Época 4','Época 5','Época 6','Época 7','Época 8','Época 9','Época 10'],
+        datasets: [{
+          label: 'Acurácia (%)',
+          data: [62,70,75,80,84,86,88,90,92,93],
+          borderColor: '#7c3aed',
+          backgroundColor: 'rgba(124,58,237,0.2)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: { scales: { y: { beginAtZero: true, max: 100 } } }
+    });
+
+    // Predict mock chart
+    new Chart(document.getElementById('predChart'), {
+      type: 'bar',
+      data: {
+        labels: Array.from({length: 10}, (_, i) => `#${i+1}`),
+        datasets: [
+          { label: 'Prob. Exoplaneta (%)', data: [95,12,78,43,66,88,22,54,39,81], backgroundColor: '#06b6d4' }
+        ]
+      },
+      options: { scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { position: 'bottom' } } }
+    });
+
+  } catch (err) {
+    console.error('Falha ao inicializar gráficos:', err);
+    // O menu continua funcionando mesmo se cair aqui
+  }
+});
+</script>
