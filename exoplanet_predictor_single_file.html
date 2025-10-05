@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     main {
       background-color: #C0C0C7;
@@ -38,7 +39,7 @@
       height: auto;
     }
     .brand{display:flex;gap:12px;align-items:center;margin-bottom:18px}
-    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800}
+    .logo{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800}
     .menu{display:flex;flex-direction:column;gap:8px}
     .menu button{background:transparent;border:0;color:var(--muted);text-align:left;padding:10px;border-radius:8px;cursor:pointer}
     .menu button.active{background: #0F0F28 ;color:#E0E0E3}
@@ -66,10 +67,10 @@
   <div class="app">
     <aside class="sidebar">
       <div class="brand">
-        <div class="logo">EP</div>
+        <div class="logo"><img src="img/logo.png" alt="ExoMiner Logo" width="44" height="44"/></div>  
         <div>
           <div style="font-weight:700">ExoMiner</div>
-          <div class="muted" style="font-size:12px">Exoplanet Data Predictor & Training</div>
+          <div class="muted" style="font-size:8px">Exoplanet Data Predictor & Training</div>
         </div>
       </div>
       <nav class="menu" id="menu">
@@ -82,7 +83,7 @@
     <main style="padding:20px;overflow:auto">
       <div class="topbar">
         <div style="display:flex;align-items:center;gap:12px">
-          <div class="search"><span>🔎</span><input id="search" placeholder="Pesquisar..." style="background:transparent;border:0;color:inherit;outline:0"/></div>
+          <div class="search"><span><i class="fa-solid fa-magnifying-glass"></i></span><input id="search" placeholder="Pesquisar..." style="background:transparent;border:0;color:inherit;outline:0"/></div>
         </div>
       </div>
 
