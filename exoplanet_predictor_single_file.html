@@ -278,8 +278,8 @@ document.addEventListener('DOMContentLoaded', () => {
       data: {
         labels: ['Pred 1', 'Pred 2', 'Pred 3'],
         datasets: [
-          { label: 'Exoplaneta', data: [6, 2, 3], backgroundColor: '#06b6d4' },
-          { label: 'Não',        data: [4, 3, 2], backgroundColor: '#ef4444' }
+          { label: 'Exoplaneta', data: [6, 2, 3], backgroundColor: '#6ce5e8' },
+          { label: 'Não',        data: [4, 3, 2], backgroundColor: '#e86ca2' }
         ]
       },
       options: { scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'bottom' } } }
@@ -289,7 +289,8 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'pie',
       data: {
         labels: ['Kepler', 'K2', 'TESS'],
-        datasets: [{ data: [10, 6, 4], backgroundColor: ['#00C853', '#648381', '#575761'] }]
+        datasets: [{ data: [10, 6, 4], backgroundColor: ['#004a57', '#648381', '#73d1d9'] }]
+        // datasets: [{ data: [10, 6, 4], backgroundColor: ['#004a57', '#73d1d9', '#575761'] }]
       },
       options: { plugins: { legend: { position: 'bottom' } } }
     });
@@ -317,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
       data: {
         labels: Array.from({length: 10}, (_, i) => `#${i+1}`),
         datasets: [
-          { label: 'Prob. Exoplaneta (%)', data: [95,12,78,43,66,88,22,54,39,81], backgroundColor: '#06b6d4' }
+          { label: 'Prob. Exoplaneta (%)', data: [95,12,78,43,66,88,22,54,39,81], backgroundColor: '#6ce5e8' }
         ]
       },
       options: { scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { position: 'bottom' } } }
